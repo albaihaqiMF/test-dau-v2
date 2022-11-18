@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Livewire\Product\Index as ProductIndex;
+use App\Http\Livewire\Product\Create as ProductCreate;
+use App\Http\Livewire\Product\Edit as ProductEdit;
+use App\Http\Livewire\Transaction\Index as TransactionIndex;
+use App\Http\Livewire\Transaction\Create as TransactionCreate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,4 +33,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::group(['prefix' => 'product', 'middleware' => 'auth'], function () {
+    Route::get('/', ProductIndex::class)->name('product.index');
+    Route::get('create', ProductCreate::class)->name('product.create');
+    Route::get('{product}/edit', ProductEdit::class)->name('product.edit');
+});
+
+Route::group(['prefix' => 'transaction'], function () {
+    Route::get('/', TransactionIndex::class)->name('transaction.index');
+    Route::get('create', TransactionCreate::class)->name('transaction.create');
+});
+
+require __DIR__ . '/auth.php';
